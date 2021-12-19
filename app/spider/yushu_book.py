@@ -1,4 +1,4 @@
-from http_helper import HTTP
+from app.libs.http_helper import HTTP
 from flask import current_app
 
 

@@ -1,6 +1,6 @@
 from flask import jsonify, request
-from helper import is_isbn_or_key
-from yushu_book import YuShuBook
+from app.libs.helper import is_isbn_or_key
+from app.spider.yushu_book import YuShuBook
 from .blueprint import book_bp
 from app.forms.args_verification import searchArgsVerification
 
