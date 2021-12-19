@@ -1,5 +1,5 @@
 from flask import Flask
-from app.web.blue_print import book_bp
+from .web.book_blueprint import book_bp
 
 
 def create_app():

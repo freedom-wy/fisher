@@ -1,7 +1,7 @@
 from flask import jsonify
 from helper import is_isbn_or_key
 from yushu_book import YuShuBook
-from app.web.blue_print import book_bp
+from .book_blueprint import book_bp
 
 
 @book_bp.route("/book/search/<q>/<page>")
