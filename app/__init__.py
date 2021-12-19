@@ -1,10 +1,22 @@
 from flask import Flask
 from .web.blueprint import book_bp
+from .libs.db_utils import db
 
 
 def create_app():
+    # 实例化FLASK核心对象
     app = Flask(__name__)
+
+    # 读取配置文件
     app.config.from_object("app.config")
     app.config.from_object("app.secure_config")
+
+    # 注册蓝图
     app.register_blueprint(book_bp)
+
+    # 注册数据库
+    db.init_app(app)
+    # with app.app_context():
+    db.create_all(app=app)
+
     return app

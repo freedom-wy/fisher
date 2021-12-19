@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String
+from app.libs.db_utils import db
 
 
-class Book():
+class Book(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String(50), nullable=False)
     author = Column(String(30), default="佚名")

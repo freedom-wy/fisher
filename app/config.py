@@ -1,6 +1,6 @@
 # 配置文件
 
-DEBUG = True
+DEBUG = False
 
 # 第三方API
 YUSHU_ISBN_API = "http://t.talelin.com/v2/book/isbn/{}"
