@@ -20,6 +20,7 @@ def search():
         page = search_args_verification.page.data
         isbn_or_key = is_isbn_or_key(q)
         if isbn_or_key == "isbn":
+            # 此处可以判断数据库中是否包含图书数据,如包含图书数据直接返回,如不包含则通过API获取并保存入库
             result = YuShuBook.search_by_isbn(q)
             result = BookViewModel.package_single(data=result, keyword=q)
         else:
