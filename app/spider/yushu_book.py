@@ -6,6 +6,7 @@ class YuShuBook(object):
 
     @classmethod
     def search_by_isbn(cls, isbn):
+        # 此处可以判断数据库中是否包含图书数据,如包含图书数据直接返回,如不包含则通过API获取并保存入库
         url = current_app.config.get("YUSHU_ISBN_API").format(isbn)
         response = HTTP.get(url)
         return response

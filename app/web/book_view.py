@@ -3,6 +3,7 @@ from app.libs.helper import is_isbn_or_key
 from app.spider.yushu_book import YuShuBook
 from .blueprint import book_bp
 from app.forms.args_verification import searchArgsVerification
+from app.view_models.book_view_models import BookViewModel
 
 
 @book_bp.route("/book/search")
@@ -20,8 +21,10 @@ def search():
         isbn_or_key = is_isbn_or_key(q)
         if isbn_or_key == "isbn":
             result = YuShuBook.search_by_isbn(q)
+            result = BookViewModel.package_single(data=result, keyword=q)
         else:
             result = YuShuBook.search_by_keyword(q, page=page)
+            result = BookViewModel.package_collection(data=result, keyword=q)
         return jsonify(result)
     else:
         return jsonify({"message": "搜索参数校验失败"})
