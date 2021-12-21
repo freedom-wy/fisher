@@ -25,7 +25,9 @@ def search():
         else:
             yushu_book.search_by_keyword(q, page)
 
+        # 格式化数据
         books.fill(yushu_book, q)
+        # 序列化为字典
         return json.dumps(books, default=lambda o: o.__dict__)
     else:
         return jsonify({"message": "搜索参数校验失败"})
