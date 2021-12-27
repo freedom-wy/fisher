@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, render_template
 from app.libs.helper import is_isbn_or_key
 from app.spider.yushu_book import YuShuBook
 from .blueprint import book_bp
@@ -9,7 +9,6 @@ import json
 
 @book_bp.route("/book/search")
 def search():
-
     search_args_verification = searchArgsVerification(request.args)
     books = CollectionBookViewModel()
 
@@ -31,3 +30,8 @@ def search():
         return json.dumps(books, default=lambda o: o.__dict__)
     else:
         return jsonify({"message": "搜索参数校验失败"})
+
+
+@book_bp.route("/test")
+def test():
+    return render_template("test.html")
