@@ -4,7 +4,8 @@ from .libs.db_utils import db
 
 
 def create_app():
-    # 实例化FLASK核心对象
+    # 实例化FLASK核心对象,通过static_folder指定静态资源路径,指定后,访问最后一个目录,http://192.168.44.148/test2/test.png,通过static_url_path指定访问URL
+    # app = Flask(__name__, static_folder="static_pic/test1/test2", static_url_path="/test")
     app = Flask(__name__)
 
     # 读取配置文件
