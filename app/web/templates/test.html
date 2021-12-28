@@ -5,4 +5,6 @@
 {% block content %}
     {{ super() }}
     <div>继承后</div>
+{#    url_for用于反向生成路径#}
+    <div><a href={{ url_for("static", filename="test.png") }}>这里有一张图片</a></div>
 {% endblock %}
