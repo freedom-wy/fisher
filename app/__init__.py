@@ -1,5 +1,5 @@
 from flask import Flask
-from .web.blueprint import book_bp
+from .web.blueprint import web
 from .libs.db_utils import db
 
 
@@ -14,7 +14,7 @@ def create_app():
     app.config.from_object("app.secure_config")
 
     # 注册蓝图
-    app.register_blueprint(book_bp)
+    app.register_blueprint(web)
 
     # 注册数据库
     db.init_app(app)
