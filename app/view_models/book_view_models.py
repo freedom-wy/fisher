@@ -9,6 +9,12 @@ class SingleBookViewModel(object):
         self.pages = book.get("pages")
         self.isbn = book.get("isbn")
 
+    # property通过属性方式访问该方法,实例.intro
+    @property
+    def intro(self):
+        intros = filter(lambda x: True if x else False, [self.author, self.publisher, self.price])
+        return "/".join(intros)
+
 
 class CollectionBookViewModel(object):
     def __init__(self):

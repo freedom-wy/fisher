@@ -3,7 +3,7 @@ from app.libs.helper import is_isbn_or_key
 from app.spider.yushu_book import YuShuBook
 from .blueprint import web
 from app.forms.args_verification import searchArgsVerification
-from app.view_models.book_view_models import CollectionBookViewModel
+from app.view_models.book_view_models import CollectionBookViewModel, SingleBookViewModel
 
 
 @web.route("/book/search")
@@ -36,4 +36,8 @@ def search():
 
 @web.route('/book/<isbn>/detail')
 def book_detail(isbn):
-    pass
+    search_book = YuShuBook()
+    search_book.search_by_isbn(isbn=isbn)
+    # 取一本书可以更优雅些
+    single_book_class = SingleBookViewModel(book=search_book.first)
+    return render_template("book_detail.html", book=single_book_class, wishes=[], gifts=[])

@@ -41,3 +41,7 @@ class YuShuBook(object):
     def calculator_start(page):
         # 计算数据起始
         return (page - 1) * current_app.config.get("PER_PAGE_DATA_COUNT")
+
+    @property
+    def first(self):
+        return self.books[0] if self.total >= 1 else None
