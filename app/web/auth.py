@@ -1,10 +1,11 @@
 from .blueprint import web
+from flask import render_template
 
 
-
+# 根据不同的请求方法判断不同的动作,登录或注册
 @web.route('/register', methods=['GET', 'POST'])
 def register():
-    pass
+    return render_template("auth/register.html", form={"data": {}})
 
 
 @web.route('/login', methods=['GET', 'POST'])
