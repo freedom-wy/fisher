@@ -1,9 +1,9 @@
-from app.libs.db_utils import db
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
+from .base import Base
 
 
-class Gift(db.Model):
+class Gift(Base):
     id = Column(Integer, primary_key=True)
     # 表示礼物是否已送出
     launched = Column(Boolean, default=False)
