@@ -1,3 +1,4 @@
+# 精妙代码
 class SingleBookViewModel(object):
     def __init__(self, book):
         self.title = book.get("title")
@@ -10,6 +11,7 @@ class SingleBookViewModel(object):
         self.isbn = book.get("isbn")
 
     # property通过属性方式访问该方法,实例.intro
+    # 精妙代码
     @property
     def intro(self):
         intros = filter(lambda x: True if x else False, [self.author, self.publisher, self.price])

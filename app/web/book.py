@@ -29,6 +29,7 @@ def search():
         # return json.dumps(books, default=lambda o: o.__dict__)
     else:
         # return jsonify({"message": "搜索参数校验失败"})
+        # 使用flask消息闪现时，需要配置secret_key
         flash("搜索的关键字不符合要求,请重新输入关键字")
     # 无论有没有搜索结果,都要return
     return render_template("search_result.html", books=books)
