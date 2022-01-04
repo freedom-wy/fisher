@@ -15,11 +15,15 @@ def search():
         q = search_args_verification.q.data.strip()
         page = search_args_verification.page.data
         isbn_or_key = is_isbn_or_key(q)
+        # 实例化请求爬虫类
         yushu_book = YuShuBook()
 
         if isbn_or_key == "isbn":
             # 此处可以判断数据库中是否包含图书数据,如包含图书数据直接返回,如不包含则通过API获取并保存入库
-            yushu_book.search_by_isbn(q)
+            if yushu_book.db_first(isbn=q):
+                yushu_book.search_by_isbn_from_db(isbn=q)
+            else:
+                yushu_book.search_by_isbn(q)
         else:
             yushu_book.search_by_keyword(q, page)
 

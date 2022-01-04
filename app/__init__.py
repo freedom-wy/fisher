@@ -1,6 +1,7 @@
 from flask import Flask
 from .web.blueprint import web
 from .libs.db_utils import db
+from flask_migrate import Migrate
 
 
 def create_app():
@@ -19,6 +20,7 @@ def create_app():
     # 注册数据库
     db.init_app(app)
     # with app.app_context():
-    db.create_all(app=app)
+    # db.create_all(app=app)
+    Migrate(app, db)
 
     return app
