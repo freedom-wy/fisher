@@ -2,6 +2,7 @@ from .blueprint import web
 from flask import render_template, request
 from app.forms.register_login_auth import RegisterForm
 from app.models.user import User
+from app.libs.db_utils import db
 
 
 # 根据不同的请求方法判断不同的动作,登录或注册
@@ -14,7 +15,10 @@ def register():
         register_user = User()
         # 保存用户注册的数据
         register_user.set_attrs(register_form.data)
-    return render_template("auth/register.html", form={"data": {}})
+        db.session.add(register_user)
+        db.session.commit()
+        return render_template("auth/login.html", form={"data": {}})
+    return render_template("auth/register.html", form=register_form)
 
 
 @web.route('/login', methods=['GET', 'POST'])
