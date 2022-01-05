@@ -7,3 +7,6 @@ class Base(db.Model):
     __abstract__ = True
     # create_time = Column("create_time", Integer)
     status = Column(SmallInteger, default=1)
+
+    def to_dict(self):
+        return {c.name:getattr(self, c.name, None) for c in self.__table__.columns}

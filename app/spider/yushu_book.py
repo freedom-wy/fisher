@@ -41,7 +41,7 @@ class YuShuBook(object):
         """
         one_book = db.session.query(Book).filter(Book.isbn == isbn).first()
         if one_book:
-            self.__fill_single(data=one_book)
+            self.__fill_single(data=one_book.to_dict())
 
     def __save_book_data_from_search_keyword(self, books):
         """
@@ -56,12 +56,15 @@ class YuShuBook(object):
                 save_book.title = i.get("title", "")
                 save_book.author = "、".join(i.get("author"))
                 save_book.binding = i.get("binding")
+                save_book.category = i.get("category")
                 save_book.publisher = i.get("publisher")
                 save_book.pages = i.get("pages")
                 save_book.pubdate = i.get("pubdate")
                 save_book.isbn = i.get("isbn")
                 save_book.summary = i.get("summary")
                 save_book.image = i.get("image")
+                save_book.price = i.get("price")
+                save_book.subtitle = i.get("subtitle")
                 db.session.add(save_book)
         db.session.commit()
 
