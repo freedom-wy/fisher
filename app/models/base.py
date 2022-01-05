@@ -8,5 +8,19 @@ class Base(db.Model):
     # create_time = Column("create_time", Integer)
     status = Column(SmallInteger, default=1)
 
+    # 精妙代码
     def to_dict(self):
-        return {c.name:getattr(self, c.name, None) for c in self.__table__.columns}
+        return {c.name: getattr(self, c.name, None) for c in self.__table__.columns}
+
+    # 精妙代码
+    def set_attrs(self, attrs_dict):
+        """
+        保存数据到模型类中,继而保存到数据库中
+        :param attrs_dict:
+        :return:
+        """
+        for key, value in attrs_dict.items():
+            # 判断是否有key这个属性
+            if hasattr(self, key) and key != "id":
+                # 设置属性的值
+                setattr(self, key, value)
