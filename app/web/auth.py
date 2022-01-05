@@ -17,7 +17,7 @@ def register():
         register_user.set_attrs(register_form.data)
         db.session.add(register_user)
         db.session.commit()
-        return render_template("auth/login.html", form={"data": {}})
+        # return render_template("auth/login.html", form={"data": {}})
     return render_template("auth/register.html", form=register_form)
 
 
