@@ -1,6 +1,6 @@
 from .blueprint import web
-from flask import render_template, request
-from app.forms.register_login_auth import RegisterForm
+from flask import render_template, request, redirect, url_for
+from app.forms.register_login_auth import RegisterForm, LoginForm
 from app.models.user import User
 from app.libs.db_utils import db
 
@@ -17,13 +17,16 @@ def register():
         register_user.set_attrs(register_form.data)
         db.session.add(register_user)
         db.session.commit()
-        # return render_template("auth/login.html", form={"data": {}})
+        redirect(url_for("web.login"))
     return render_template("auth/register.html", form=register_form)
 
 
 @web.route('/login', methods=['GET', 'POST'])
 def login():
-    pass
+    login_form = LoginForm(request.form)
+    if request.method == "POST" and login_form.validate():
+        pass
+    return render_template("auth/login.html", form=login_form)
 
 
 @web.route('/reset/password', methods=['GET', 'POST'])
