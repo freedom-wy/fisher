@@ -1,5 +1,5 @@
 from .blueprint import web
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from app.forms.register_login_auth import RegisterForm, LoginForm
 from app.models.user import User
 from app.libs.db_utils import db
@@ -24,8 +24,13 @@ def register():
 @web.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm(request.form)
+    # 登录验证
     if request.method == "POST" and login_form.validate():
-        pass
+        user = User.query.filter_by(email=login_form.email.data).first()
+        if user and user.check_password(login_form.password.data):
+            pass
+        else:
+            flash("账号不存在或密码错误")
     return render_template("auth/login.html", form=login_form)
 
 

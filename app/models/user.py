@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean, Float
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from .base import Base
 
@@ -32,3 +32,11 @@ class User(Base):
         :return:
         """
         self._password = generate_password_hash(raw)
+
+    def check_password(self, raw):
+        """
+        校验密码
+        :param raw:
+        :return:
+        """
+        return check_password_hash(self._password, raw)
