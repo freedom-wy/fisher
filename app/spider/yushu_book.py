@@ -72,8 +72,9 @@ class YuShuBook(object):
         url = current_app.config.get("YUSHU_KEYWORD_API").format(keyword, current_app.config.get("PER_PAGE_DATA_COUNT"),
                                                                  self.calculator_start(page))
         response = HTTP.get(url)
-        self.__save_book_data_from_search_keyword(books=response.get("books"))
-        self.__fill_collection(data=response)
+        if response:
+            self.__save_book_data_from_search_keyword(books=response.get("books"))
+            self.__fill_collection(data=response)
 
     @staticmethod
     def calculator_start(page):
@@ -88,3 +89,13 @@ class YuShuBook(object):
     @staticmethod
     def db_first(isbn):
         return db.session.query(Book).filter(Book.isbn == isbn).first()
+
+
+if __name__ == '__main__':
+    from app import create_app
+    app = create_app()
+    with app.app_context():
+        test_yushu = YuShuBook()
+        test_yushu.search_by_keyword(keyword="西游记")
+        # test_yushu.search_by_isbn(isbn="9787805200552")
+        print(test_yushu.books)

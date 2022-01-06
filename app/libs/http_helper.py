@@ -7,7 +7,11 @@ class HTTP(object):
     """
     @staticmethod
     def get(url, return_json=True):
-        response = requests.get(url)
-        if response.status_code != 200:
+        try:
+            response = requests.get(url)
+        except Exception as e:
             return {} if return_json else ""
-        return response.json() if return_json else response.text
+        else:
+            if response.status_code != 200:
+                return {} if return_json else ""
+            return response.json() if return_json else response.text
