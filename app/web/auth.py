@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for, flash
 from app.forms.register_login_auth import RegisterForm, LoginForm
 from app.models.user import User
 from app.libs.db_utils import db
+from flask_login import login_user
 
 
 # 根据不同的请求方法判断不同的动作,登录或注册
@@ -27,8 +28,10 @@ def login():
     # 登录验证
     if request.method == "POST" and login_form.validate():
         user = User.query.filter_by(email=login_form.email.data).first()
+        # 校验密码
         if user and user.check_password(login_form.password.data):
-            pass
+            # 写入cookie信息, 需要在user模型类中继承UserMixin类, 可以在login_user中设置是否记住cookie
+            login_user(user, remember=True)
         else:
             flash("账号不存在或密码错误")
     return render_template("auth/login.html", form=login_form)
