@@ -4,6 +4,7 @@ from app.spider.yushu_book import YuShuBook
 from .blueprint import web
 from app.forms.args_verification import searchArgsVerification
 from app.view_models.book_view_models import CollectionBookViewModel, SingleBookViewModel
+from app.models.book import Book
 
 
 @web.route("/book/search")
@@ -42,7 +43,12 @@ def search():
 @web.route('/book/<isbn>/detail')
 def book_detail(isbn):
     search_book = YuShuBook()
-    search_book.search_by_isbn(isbn=isbn)
-    # 取一本书可以更优雅些
-    single_book_class = SingleBookViewModel(book=search_book.first)
+    # 首先查库,如库中不存在则通过接口访问
+    book = Book.query.filter_by(isbn=isbn).first()
+    if book:
+        single_book_class = SingleBookViewModel(book=book.to_dict())
+    else:
+        # 取一本书可以更优雅些
+        search_book.search_by_isbn(isbn=isbn)
+        single_book_class = SingleBookViewModel(book=search_book.first)
     return render_template("book_detail.html", book=single_book_class, wishes=[], gifts=[])

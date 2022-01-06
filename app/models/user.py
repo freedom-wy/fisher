@@ -11,6 +11,7 @@ class User(UserMixin, Base):
     email = Column(String(50), unique=True, nullable=False)
     _password = Column('password', String(128), nullable=False)
     confirmed = Column(Boolean, default=False)
+    # 鱼豆
     beans = Column(Float, default=0)
     send_counter = Column(Integer, default=0)
     receive_counter = Column(Integer, default=0)
