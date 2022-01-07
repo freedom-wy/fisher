@@ -29,18 +29,13 @@ class YuShuBook(object):
         self.books = data.get("books")
 
     def search_by_isbn(self, isbn):
-        url = current_app.config.get("YUSHU_ISBN_API").format(isbn)
-        response = HTTP.get(url)
-        self.__fill_single(data=response)
-
-    def search_by_isbn_from_db(self, isbn):
-        """
-        查询数据库
-        :param isbn:
-        :return:
-        """
+        # 先查库
         one_book = db.session.query(Book).filter(Book.isbn == isbn).first()
-        if one_book:
+        if not one_book:
+            url = current_app.config.get("YUSHU_ISBN_API").format(isbn)
+            response = HTTP.get(url)
+            self.__fill_single(data=response)
+        else:
             self.__fill_single(data=one_book.to_dict())
 
     def __save_book_data_from_search_keyword(self, books):
@@ -53,6 +48,7 @@ class YuShuBook(object):
             save_book = Book()
             book = db.session.query(Book).filter(Book.isbn == i.get("isbn")).first()
             if not book:
+                save_book.set_attrs(i)
                 # save_book.title = i.get("title", "")
                 # save_book.author = "、".join(i.get("author"))
                 # save_book.binding = i.get("binding")
@@ -65,7 +61,6 @@ class YuShuBook(object):
                 # save_book.image = i.get("image")
                 # save_book.price = i.get("price")
                 # save_book.subtitle = i.get("subtitle")
-                save_book.set_attrs(i)
                 db.session.add(save_book)
         db.session.commit()
 
@@ -86,10 +81,6 @@ class YuShuBook(object):
     @property
     def first(self):
         return self.books[0] if self.total >= 1 else None
-
-    @staticmethod
-    def db_first(isbn):
-        return db.session.query(Book).filter(Book.isbn == isbn).first()
 
 
 if __name__ == '__main__':
