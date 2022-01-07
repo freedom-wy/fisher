@@ -14,11 +14,11 @@ def register():
     register_form = RegisterForm(request.form)
     # 注册
     if request.method == "POST" and register_form.validate():
-        register_user = User()
-        # 保存用户注册的数据
-        register_user.set_attrs(register_form.data)
-        db.session.add(register_user)
-        db.session.commit()
+        with db.auto_commit():
+            register_user = User()
+            # 保存用户注册的数据
+            register_user.set_attrs(register_form.data)
+            db.session.add(register_user)
         return redirect(url_for("web.login"))
     return render_template("auth/register.html", form=register_form)
 

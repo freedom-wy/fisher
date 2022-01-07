@@ -22,5 +22,7 @@ class Base(db.Model):
         for key, value in attrs_dict.items():
             # 判断是否有key这个属性
             if hasattr(self, key) and key != "id":
+                if isinstance(value, list):
+                    value = "、".join(value)
                 # 设置属性的值
                 setattr(self, key, value)

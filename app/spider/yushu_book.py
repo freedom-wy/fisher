@@ -44,25 +44,13 @@ class YuShuBook(object):
         :param books:
         :return:
         """
-        for i in books:
-            save_book = Book()
-            book = db.session.query(Book).filter(Book.isbn == i.get("isbn")).first()
-            if not book:
-                save_book.set_attrs(i)
-                # save_book.title = i.get("title", "")
-                # save_book.author = "、".join(i.get("author"))
-                # save_book.binding = i.get("binding")
-                # save_book.category = i.get("category")
-                # save_book.publisher = i.get("publisher")
-                # save_book.pages = i.get("pages")
-                # save_book.pubdate = i.get("pubdate")
-                # save_book.isbn = i.get("isbn")
-                # save_book.summary = i.get("summary")
-                # save_book.image = i.get("image")
-                # save_book.price = i.get("price")
-                # save_book.subtitle = i.get("subtitle")
-                db.session.add(save_book)
-        db.session.commit()
+        with db.auto_commit():
+            for i in books:
+                save_book = Book()
+                book = db.session.query(Book).filter(Book.isbn == i.get("isbn")).first()
+                if not book:
+                    save_book.set_attrs(i)
+                    db.session.add(save_book)
 
     def search_by_keyword(self, keyword, page=1):
         url = current_app.config.get("YUSHU_KEYWORD_API").format(keyword, current_app.config.get("PER_PAGE_DATA_COUNT"),
