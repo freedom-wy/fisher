@@ -1,12 +1,16 @@
 from app.libs.db_utils import db
 from sqlalchemy import Column, SmallInteger, Integer
+from datetime import datetime
 
 
 class Base(db.Model):
     # 使用abstract属性,sqlalchemy将不创建base表
     __abstract__ = True
-    # create_time = Column("create_time", Integer)
+    create_time = Column("create_time", Integer)
     status = Column(SmallInteger, default=1)
+
+    def __init__(self):
+        self.create_time = int(datetime.now().timestamp())
 
     # 精妙代码
     def to_dict(self):

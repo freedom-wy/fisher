@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from .base import Base
 
 
+# 模型类必须创建,继承时不创建该表
 class Wish(Base):
     """
     心愿清单
