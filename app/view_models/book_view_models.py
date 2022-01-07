@@ -3,7 +3,8 @@ class SingleBookViewModel(object):
     def __init__(self, book):
         self.title = book.get("title")
         self.publisher = book.get("publisher")
-        self.author = "、".join(book.get("author"))
+        self.author = "、".join(book.get("author")) if isinstance(book.get("author"), list) else book.get("author")
+        # self.author = book.get("author")
         self.image = book.get("image")
         self.price = book.get("price")
         self.summary = book.get("summary")
