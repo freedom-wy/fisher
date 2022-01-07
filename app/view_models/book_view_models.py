@@ -10,6 +10,8 @@ class SingleBookViewModel(object):
         self.summary = book.get("summary")
         self.pages = book.get("pages")
         self.isbn = book.get("isbn")
+        self.pubdate = book.get("pubdate")
+        self.binding = book.get("binding")
 
     # property通过属性方式访问该方法,实例.intro
     # 精妙代码

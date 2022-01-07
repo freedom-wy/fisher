@@ -2,7 +2,7 @@ from .blueprint import web
 from flask_login import login_required, current_user
 from app.models.gift import Gift
 from app.libs.db_utils import db
-from flask import current_app, flash
+from flask import current_app, flash, redirect, url_for
 from app.libs.helper import check_can_save_to_list
 
 
@@ -32,7 +32,7 @@ def save_to_gifts(isbn):
             db.session.add(gift)
     else:
         flash("这本书已添加到你的赠送清单或已存在于你的心愿清单,请不要重复添加")
-    return "OK"
+    return redirect(url_for("web.book_detail", isbn=isbn))
 
 
 @web.route('/gifts/<gid>/redraw')
