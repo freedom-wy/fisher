@@ -29,3 +29,10 @@ class Base(db.Model):
                 value = "、".join(value) if isinstance(value, list) else value
                 # 设置属性的值
                 setattr(self, key, value)
+
+    @property
+    def create_datetime(self):
+        if self.create_time:
+            return datetime.fromtimestamp(self.create_time)
+        else:
+            return None

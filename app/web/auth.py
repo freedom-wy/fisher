@@ -3,7 +3,7 @@ from flask import render_template, request, redirect, url_for, flash
 from app.forms.register_login_auth import RegisterForm, LoginForm
 from app.models.user import User
 from app.libs.db_utils import db
-from flask_login import login_user
+from flask_login import login_user, current_user
 from app.libs.url_utils import split_url
 
 
@@ -25,6 +25,8 @@ def register():
 
 @web.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("web.index"))
     # 获取post请求表单信息
     login_form = LoginForm(request.form)
     # 登录验证

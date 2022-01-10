@@ -133,3 +133,5 @@ dmypy.json
 secure_config.py
 
 .venv/
+
+sample/demo/

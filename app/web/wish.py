@@ -1,6 +1,6 @@
 from .blueprint import web
 from app.libs.helper import check_can_save_to_list
-from flask_login import current_user
+from flask_login import current_user, login_required
 from app.libs.db_utils import db
 from app.models.wish import Wish
 from flask import flash, redirect, url_for
@@ -12,6 +12,7 @@ def my_wish():
 
 
 @web.route('/wish/book/<isbn>')
+@login_required
 def save_to_wish(isbn):
     # 通过事物保持一致性
     if check_can_save_to_list(isbn, current_user.id):

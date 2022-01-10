@@ -9,7 +9,7 @@ from app.libs.helper import check_can_save_to_list
 @web.route('/my/gifts')
 @login_required
 def my_gifts():
-    return "ok"
+    return "???"
 
 
 @web.route('/gifts/book/<isbn>')
