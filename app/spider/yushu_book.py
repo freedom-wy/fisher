@@ -76,6 +76,6 @@ if __name__ == '__main__':
     app = create_app()
     with app.app_context():
         test_yushu = YuShuBook()
-        test_yushu.search_by_keyword(keyword="西游记")
+        test_yushu.search_by_keyword(keyword="三国演义")
         # test_yushu.search_by_isbn(isbn="9787805200552")
         print(test_yushu.books)

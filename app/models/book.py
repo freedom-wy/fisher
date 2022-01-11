@@ -12,7 +12,8 @@ class Book(Base):
     category = Column(String(20))
     # 出版社
     publisher = Column(String(50))
-    pages = Column(Integer)
+    # pages = Column(Integer)
+    pages = Column(String(10))
     pubdate = Column(String(20))
     # unique 该字段不重复
     isbn = Column(String(15), nullable=False, unique=True)
