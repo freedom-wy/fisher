@@ -3,7 +3,7 @@ from flask import render_template, request, redirect, url_for, flash
 from app.forms.register_login_auth import RegisterForm, LoginForm
 from app.models.user import User
 from app.libs.db_utils import db
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user
 from app.libs.url_utils import split_url
 
 
@@ -38,7 +38,7 @@ def login():
             login_user(user, remember=True)
             # 获取get请求信息
             next_url = request.args.get("next")
-            if not next_url or not split_url(request.url, next_url):
+            if not next_url or not next_url.startswith("/"):
                 next_url = url_for("web.index")
             return redirect(next_url)
         else:
@@ -63,4 +63,5 @@ def change_password():
 
 @web.route('/logout')
 def logout():
-    pass
+    logout_user()
+    return redirect(url_for("web.index"))

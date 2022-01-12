@@ -9,7 +9,15 @@ from app.libs.helper import check_can_save_to_list
 @web.route('/my/gifts')
 @login_required
 def my_gifts():
-    return "???"
+    """
+    1、查询当前用户所有礼物数据
+    2、根据礼物数据获得所有心愿数据的数量
+    :return:
+    """
+    # gifts_of_mine = Gift.get_user_gifts(uid=current_user.id)
+    # isbn_list = [gift.isbn for gift in gifts_of_mine]
+    # wish_count_list = Gift.get_wish_counts(isbn_list)
+    return "my gifts"
 
 
 @web.route('/gifts/book/<isbn>')
