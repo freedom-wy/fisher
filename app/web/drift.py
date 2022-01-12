@@ -1,7 +1,6 @@
 from .blueprint import web
 
 
-
 @web.route('/drift/<int:gid>', methods=['GET', 'POST'])
 def send_drift(gid):
     pass

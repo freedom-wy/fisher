@@ -3,12 +3,19 @@ from app.libs.helper import check_can_save_to_list
 from flask_login import current_user, login_required
 from app.libs.db_utils import db
 from app.models.wish import Wish
-from flask import flash, redirect, url_for
+from flask import flash, redirect, url_for, render_template
+from app.view_models.my_wishes_view_models import CollectionMywishes
 
 
 @web.route('/my/wish')
+@login_required
 def my_wish():
-    pass
+    mywishes_source_data = Wish.get_user_wishes(uid=current_user.id)
+    isbn_list = [wish.isbn for wish in mywishes_source_data]
+    gift_count_list = Wish.get_wish_counts(isbn_list)
+    # 原始数据转换为view_model,便于模板渲染
+    view_model = CollectionMywishes(mywishes_source_data, gift_count_list)
+    return render_template("my_wish.html", wishes=view_model.gifts)
 
 
 @web.route('/wish/book/<isbn>')

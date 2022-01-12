@@ -4,7 +4,6 @@ from app.forms.register_login_auth import RegisterForm, LoginForm
 from app.models.user import User
 from app.libs.db_utils import db
 from flask_login import login_user, current_user, logout_user
-from app.libs.url_utils import split_url
 
 
 # 根据不同的请求方法判断不同的动作,登录或注册

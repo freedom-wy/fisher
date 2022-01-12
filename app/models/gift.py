@@ -4,7 +4,6 @@ from .base import Base
 from .book import Book
 from flask import current_app
 from app.libs.db_utils import db
-from .wish import Wish
 
 
 class Gift(Base):
@@ -65,6 +64,8 @@ class Gift(Base):
         :param isbn_list:
         :return:
         """
+        # 解决循环导入问题
+        from .wish import Wish
         count_list = db.session.query(func.count(Wish.id), Wish.isbn).filter(
             Wish.launched == False, Wish.isbn.in_(isbn_list), Wish.status == 1).group_by(Wish.isbn).all()
         # 尽量以字典形式向外返回数据
