@@ -2,8 +2,9 @@ from .blueprint import web
 from flask_login import login_required, current_user
 from app.models.gift import Gift
 from app.libs.db_utils import db
-from flask import current_app, flash, redirect, url_for
+from flask import current_app, flash, redirect, url_for, render_template
 from app.libs.helper import check_can_save_to_list
+from ..view_models.my_gifts_view_models import CollectionMygifts
 
 
 @web.route('/my/gifts')
@@ -14,10 +15,12 @@ def my_gifts():
     2、根据礼物数据获得所有心愿数据的数量
     :return:
     """
-    # gifts_of_mine = Gift.get_user_gifts(uid=current_user.id)
-    # isbn_list = [gift.isbn for gift in gifts_of_mine]
-    # wish_count_list = Gift.get_wish_counts(isbn_list)
-    return "my gifts"
+    mygifts_source_data = Gift.get_user_gifts(uid=current_user.id)
+    isbn_list = [gift.isbn for gift in mygifts_source_data]
+    wish_count_list = Gift.get_wish_counts(isbn_list)
+    # 原始数据转换为view_model,便于模板渲染
+    view_model = CollectionMygifts(mygifts_source_data, wish_count_list)
+    return render_template("my_gifts.html", gifts=view_model.gifts)
 
 
 @web.route('/gifts/book/<isbn>')
