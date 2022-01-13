@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 from app.libs.db_utils import db
 from app.models.wish import Wish
 from flask import flash, redirect, url_for, render_template
-from app.view_models.my_wishes_view_models import CollectionMywishes
+from app.view_models.trade_view_models import MyGiftWishInfo
 
 
 @web.route('/my/wish')
@@ -14,8 +14,8 @@ def my_wish():
     isbn_list = [wish.isbn for wish in mywishes_source_data]
     gift_count_list = Wish.get_wish_counts(isbn_list)
     # 原始数据转换为view_model,便于模板渲染
-    view_model = CollectionMywishes(mywishes_source_data, gift_count_list)
-    return render_template("my_wish.html", wishes=view_model.gifts)
+    view_model = MyGiftWishInfo(mywishes_source_data, gift_count_list)
+    return render_template("my_wish.html", wishes=view_model.trades)
 
 
 @web.route('/wish/book/<isbn>')

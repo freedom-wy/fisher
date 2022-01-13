@@ -4,7 +4,7 @@ from app.models.gift import Gift
 from app.libs.db_utils import db
 from flask import current_app, flash, redirect, url_for, render_template
 from app.libs.helper import check_can_save_to_list
-from ..view_models.my_gifts_view_models import CollectionMygifts
+from ..view_models.trade_view_models import MyGiftWishInfo
 
 
 @web.route('/my/gifts')
@@ -19,8 +19,8 @@ def my_gifts():
     isbn_list = [gift.isbn for gift in mygifts_source_data]
     wish_count_list = Gift.get_wish_counts(isbn_list)
     # 原始数据转换为view_model,便于模板渲染
-    view_model = CollectionMygifts(mygifts_source_data, wish_count_list)
-    return render_template("my_gifts.html", gifts=view_model.gifts)
+    view_model = MyGiftWishInfo(mygifts_source_data, wish_count_list)
+    return render_template("my_gifts.html", gifts=view_model.trades)
 
 
 @web.route('/gifts/book/<isbn>')

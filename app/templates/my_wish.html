@@ -33,9 +33,9 @@
                         </a>
                     </div>
                     <div class="col-md-3 flex-vertical">
-                        {% if wish.wishes_count %}
+                        {% if wish.gifts_wishes_count %}
                             <a href="{{ url_for('web.book_detail', isbn=wish.book.isbn) }}">
-                                <span class="bg-info">{{ wish.wishes_count }}人赠送</span>
+                                <span class="bg-info">{{ wish.gifts_wishes_count }}人赠送</span>
                             </a>
                         {% endif %}
                     </div>

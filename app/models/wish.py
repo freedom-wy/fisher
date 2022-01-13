@@ -26,7 +26,7 @@ class Wish(Base):
     @property
     def book(self):
         """
-        通过礼物查书,再转换成view_models
+        通过心愿查书,再转换成view_models
         :return:
         """
         return Book.query.filter_by(isbn=self.isbn).first().to_dict()
