@@ -2,6 +2,8 @@ from sqlalchemy import Column, Integer, String, Boolean, Float
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from .base import Base
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
 
 
 class User(UserMixin, Base):
@@ -36,8 +38,16 @@ class User(UserMixin, Base):
 
     def check_password(self, raw):
         """
-        校验密码
+        校验密码是否正确
         :param raw:
         :return:
         """
         return check_password_hash(self._password, raw)
+
+    def generate_token(self):
+        """
+        生成重置密码中的token
+        :return:
+        """
+        s = Serializer(current_app.config.get("SECRET_KEY"), current_app.config.get("TOKEN_EXPIRATION"))
+        return s.dumps({"id": self.id}).decode("utf-8")

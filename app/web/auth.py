@@ -59,13 +59,14 @@ def forget_password_request():
         user = User.query.filter_by(email=forget_password_form.email.data).first_or_404()
         # 解决循环引用
         from app.libs.email_utils import handle_send_mail
-        handle_send_mail(to=user.email, subject="重置你的密码", template="email/reset_password.html", user=user, token="123")
+        handle_send_mail(to=user.email, subject="重置你的密码", template="email/reset_password.html", user=user,
+                         token=user.generate_token())
     return render_template("auth/forget_password_request.html", form=forget_password_form)
 
 
 @web.route('/reset/password/<token>', methods=['GET', 'POST'])
 def forget_password(token):
-    pass
+    return render_template("auth/forget_password.html")
 
 
 @web.route('/change/password', methods=['GET', 'POST'])
