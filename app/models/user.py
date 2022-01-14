@@ -4,6 +4,7 @@ from flask_login import UserMixin
 from .base import Base
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
+from app.libs.db_utils import db
 
 
 class User(UserMixin, Base):
@@ -50,4 +51,30 @@ class User(UserMixin, Base):
         :return:
         """
         s = Serializer(current_app.config.get("SECRET_KEY"), current_app.config.get("TOKEN_EXPIRATION"))
+        # 序列化
         return s.dumps({"id": self.id}).decode("utf-8")
+
+    @staticmethod
+    def reset_password(token, newpassword):
+        """
+        设置用户新密码
+        :param newpassword:
+        :return:
+        """
+        s = Serializer(current_app.config.get("SECRET_KEY"))
+        # 反序列化
+        try:
+            data = s.loads(token.encode("utf-8"))
+        except:
+            # 解密token失败
+            return False
+        uid = data.get("id")
+        # 设置新密码
+        with db.auto_commit():
+            user = User.query.get(uid)
+
+            if user:
+                user.password = newpassword
+            else:
+                return False
+        return True

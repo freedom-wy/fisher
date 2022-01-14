@@ -4,7 +4,7 @@ from app.forms.register_login_auth import RegisterForm, LoginForm
 from app.models.user import User
 from app.libs.db_utils import db
 from flask_login import login_user, current_user, logout_user
-from app.forms.forget_password_auth import ForgetPasswordAuthEmail
+from app.forms.forget_password_auth import ForgetPasswordAuthEmail, ResetPasswordForm
 
 
 # 根据不同的请求方法判断不同的动作,登录或注册
@@ -64,9 +64,20 @@ def forget_password_request():
     return render_template("auth/forget_password_request.html", form=forget_password_form)
 
 
+# 该视图可以随便进入,即为路径后token数据随便写
 @web.route('/reset/password/<token>', methods=['GET', 'POST'])
 def forget_password(token):
-    return render_template("auth/forget_password.html")
+    password_form = ResetPasswordForm(request.form)
+    if request.method == "POST" and password_form.validate():
+        # 重置密码
+        success = User.reset_password(token, password_form.password1.data)
+        if success:
+            flash("密码更新成功， 请使用新密码登录")
+            return redirect(url_for("web.login"))
+        else:
+            flash("密码重置失败")
+            return redirect(url_for("web.forget_password_request"))
+    return render_template("auth/forget_password.html", form=password_form)
 
 
 @web.route('/change/password', methods=['GET', 'POST'])
