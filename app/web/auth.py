@@ -4,6 +4,7 @@ from app.forms.register_login_auth import RegisterForm, LoginForm
 from app.models.user import User
 from app.libs.db_utils import db
 from flask_login import login_user, current_user, logout_user
+from app.forms.forget_password_auth import ForgetPasswordAuthEmail
 
 
 # 根据不同的请求方法判断不同的动作,登录或注册
@@ -47,7 +48,19 @@ def login():
 
 @web.route('/reset/password', methods=['GET', 'POST'])
 def forget_password_request():
-    pass
+    """
+    1、检查邮箱是否符合要求
+    2、通过邮箱查询用户
+    :return:
+    """
+    forget_password_form = ForgetPasswordAuthEmail(request.form)
+    if request.method == "POST" and forget_password_form.validate():
+        # 通过邮箱查用户,返回用户数据或404
+        user = User.query.filter_by(email=forget_password_form.email.data).first_or_404()
+        # 解决循环引用
+        from app.libs.email_utils import handle_send_mail
+        handle_send_mail(to=user.email, subject="重置你的密码", template="email/reset_password.html", user=user, token="123")
+    return render_template("auth/forget_password_request.html", form=forget_password_form)
 
 
 @web.route('/reset/password/<token>', methods=['GET', 'POST'])

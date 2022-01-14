@@ -6,3 +6,4 @@ mysqlclient==2.1.0
 requests==2.27.0
 WTForms==3.0.0
 Flask-Login==0.5.0
+Flask-Mail==0.9.1
