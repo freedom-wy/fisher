@@ -61,6 +61,7 @@ def forget_password_request():
         from app.libs.email_utils import handle_send_mail
         handle_send_mail(to=user.email, subject="重置你的密码", template="email/reset_password.html", user=user,
                          token=user.generate_token())
+        flash("密码重置邮件已发送至{},该邮件5分钟过期".format(user.email))
     return render_template("auth/forget_password_request.html", form=forget_password_form)
 
 
