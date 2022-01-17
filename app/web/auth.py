@@ -5,6 +5,7 @@ from app.models.user import User
 from app.libs.db_utils import db
 from flask_login import login_user, current_user, logout_user
 from app.forms.forget_password_auth import ForgetPasswordAuthEmail, ResetPasswordForm
+from app.libs.email_utils import handle_send_mail
 
 
 # 根据不同的请求方法判断不同的动作,登录或注册
@@ -58,7 +59,6 @@ def forget_password_request():
         # 通过邮箱查用户,返回用户数据或404
         user = User.query.filter_by(email=forget_password_form.email.data).first_or_404()
         # 解决循环引用
-        from app.libs.email_utils import handle_send_mail
         handle_send_mail(to=user.email, subject="重置你的密码", template="email/reset_password.html", user=user,
                          token=user.generate_token())
         flash("密码重置邮件已发送至{},该邮件5分钟过期".format(user.email))

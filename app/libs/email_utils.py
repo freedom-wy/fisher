@@ -3,8 +3,11 @@
 """
 from flask_mail import Message
 from flask import current_app, render_template
-from app import mail
+# from app import mail
 from threading import Thread
+from flask_mail import Mail
+
+mail = Mail()
 
 
 # 异步发送邮件

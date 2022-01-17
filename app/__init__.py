@@ -3,9 +3,7 @@ from .web.blueprint import web
 from .libs.db_utils import db
 from .libs.login_utils import login_manager
 from flask_migrate import Migrate
-from flask_mail import Mail
-
-mail = Mail()
+from .libs.email_utils import mail
 
 
 def create_app():
