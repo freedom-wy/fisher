@@ -1,3 +1,5 @@
+from math import floor
+
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -5,6 +7,10 @@ from .base import Base
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app
 from app.libs.db_utils import db
+# from .gift import Gift
+# from .wish import Wish
+from .drift import Drift
+from ..libs.enums import PendingStatus
 
 
 class User(UserMixin, Base):
@@ -78,3 +84,26 @@ class User(UserMixin, Base):
             else:
                 return False
         return True
+
+    def can_send_drift(self):
+        # 查看鱼豆数量
+        if self.beans < 1:
+            return False
+        # 赠送的图书数量
+        # success_gifts_count = Gift.query.filter_by(uid=self.id, launched=True).count()
+        success_gifts_count = Drift.query.filter_by(gifter_id=self.id, pending=PendingStatus.Success).count()
+        # 收到的图书数量
+        # success_receive_count = Wish.query.filter_by(uid=self.id, launched=True).count()
+        success_receive_count = Drift.query.filter_by(requester_id=self.id, pending=PendingStatus.Success).count()
+        # 每收到两本书必须送出一本书
+        return True if floor(success_receive_count / 2) <= floor(success_gifts_count) else False
+
+    @property
+    def summary(self):
+        return dict(
+            nickname=self.nickname,
+            beans=self.beans,
+            email=self.email,
+            send_recive="{send_counter}/{receive_counter}".format(
+                send_counter=self.send_counter, receive_counter=self.receive_counter)
+        )

@@ -71,3 +71,6 @@ class Gift(Base):
         # 尽量以字典形式向外返回数据
         count_list = [{"count": w[0], "isbn": w[1]} for w in count_list]
         return count_list
+
+    def is_yourself_gift(self, uid):
+        return True if self.uid == uid else False
