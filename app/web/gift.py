@@ -58,7 +58,8 @@ def redraw_from_gifts(gid):
     """
     # 1、该礼物不能存在于鱼漂中
     # 2、扣除鱼豆,并删除该书籍
-    drift = Drift.query.filter_by(gift_id=gid, pending=PendingStatus.Waiting).first_or_404()
+    # 此处查询需注意,在sqlalchemy查询中getter和setter不起作用
+    drift = Drift.query.filter_by(gift_id=gid, _pending=PendingStatus.Waiting.value).first()
     if drift:
         flash("该书籍正处于交易状态,请先前往鱼漂页面完成处理")
     else:
@@ -67,7 +68,3 @@ def redraw_from_gifts(gid):
             current_user.beans -= current_app.config.get("BEANS_UPLOAD_ONE_BOOK")
             gift.delete()
     return redirect(url_for("web.my_gifts"))
-
-
-
-
