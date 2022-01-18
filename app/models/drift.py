@@ -32,6 +32,7 @@ class Drift(Base):
     # 交易的4种状态
     _pending = Column("pending", SmallInteger, default=1)
 
+    # 精妙代码
     @property
     def pending(self):
         # 数字类型转枚举类型

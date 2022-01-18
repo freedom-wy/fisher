@@ -85,8 +85,10 @@ def redraw_drift(did):
     """
     # 修改鱼漂中条目状态
     with db.auto_commit():
-        drift = Drift.query.filter(Drift.id == did).first_or_404()
+        drift = Drift.query.filter_by(id=did).first_or_404()
         drift.pending = PendingStatus.Redraw
+        # 由于撤销,归还鱼豆
+        current_user.beans += 1
     return redirect(url_for("web.pending"))
 
 

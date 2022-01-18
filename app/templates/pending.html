@@ -38,7 +38,7 @@
                     </div>
                     <div class="col-md-2 flex-vertical">
                         {% if drift.you_are == 'gifter' %}
-                            {% if drift.status.value == 1 %}
+                            {% if drift.status == 1 %}
                                 <a href="{{ url_for('web.mailed_drift', did=drift.drift_id) }}">
                                     <span class="btn-normal">已邮寄</span>
                                 </a>
@@ -48,7 +48,7 @@
                             {% endif %}
                         {% endif %}
                         {% if drift.you_are == 'requester' %}
-                            {% if drift.status.value == 1 %}
+                            {% if drift.status == 1 %}
                                 <a href="{{ url_for('web.redraw_drift', did=drift.drift_id) }}">
                                         <span class="btn-normal">撤 销</span>
                                 </a>

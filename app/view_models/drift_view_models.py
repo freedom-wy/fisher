@@ -27,7 +27,7 @@ class DriftViewModel(object):
         :return:
         """
         you_are = self.requester_or_gifter(drift, current_user_id)
-        pending_status = PendingStatus.pending_str(drift.status, you_are)
+        pending_status = PendingStatus.pending_str(drift.pending, you_are)
         r = {
             "you_are": you_are,
             "drift_id": drift.id,
