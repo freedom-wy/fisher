@@ -1,3 +1,6 @@
+from app.libs.enums import PendingStatus
+
+
 class DriftInfo(object):
     def __init__(self, user):
         self.nickname = user.nickname
@@ -13,8 +16,8 @@ class DriftInfo(object):
 
 
 class DriftViewModel(object):
-    def __init__(self, drift):
-        pass
+    def __init__(self, drift, current_user_id):
+        self.data = self.__parse(drift, current_user_id)
 
     def __parse(self, drift, current_user_id):
         """
@@ -24,6 +27,7 @@ class DriftViewModel(object):
         :return:
         """
         you_are = self.requester_or_gifter(drift, current_user_id)
+        pending_status = PendingStatus.pending_str(drift.status, you_are)
         r = {
             "you_are": you_are,
             "drift_id": drift.id,
@@ -34,10 +38,13 @@ class DriftViewModel(object):
             "operator": drift.requester_nickname if you_are != "requester" else drift.gifter_nickname,
             "message": drift.message,
             "address": drift.address,
+            # 收件人姓名
             "recipient_name": drift.recipient_name,
             "mobile": drift.mobile,
-            "status": drift.status
+            "status": drift.status,
+            "status_str": pending_status
         }
+        return r
 
     @staticmethod
     def requester_or_gifter(drift, current_user_id):
@@ -53,3 +60,13 @@ class DriftViewModel(object):
         return you_are
 
 
+class DriftCollection(object):
+    def __init__(self, drifts, current_user_id):
+        self.data = self.__parse(drifts, current_user_id)
+
+    @staticmethod
+    def __parse(drifts, current_user_id):
+        temp = []
+        for drift in drifts:
+            temp.append(DriftViewModel(drift, current_user_id).data)
+        return temp

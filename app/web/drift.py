@@ -10,6 +10,7 @@ from app.models.drift import Drift
 from app.models.book import Book
 from app.libs.email_utils import handle_send_mail
 from sqlalchemy import desc, or_
+from app.view_models.drift_view_models import DriftCollection
 
 
 @web.route('/drift/<int:gid>', methods=['GET', 'POST'])
@@ -61,8 +62,11 @@ def pending():
     :return:
     """
     # 查询drift表中数据并根据要求展示
-    drifts = Drift.query.filter(or_(Drift.requester_id == current_user.id, Drift.gifter_id==current_user.id)).order_by(
+    drifts = Drift.query.filter(
+        or_(Drift.requester_id == current_user.id, Drift.gifter_id == current_user.id)).order_by(
         desc(Drift.create_time)).all()
+    views = DriftCollection(drifts, current_user.id)
+    return render_template("pending.html", drifts=views.data)
 
 
 @web.route('/drift/<int:did>/reject')

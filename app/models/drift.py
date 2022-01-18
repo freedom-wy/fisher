@@ -11,6 +11,7 @@ class Drift(Base):
     """
     id = Column(Integer, primary_key=True)
     # 邮寄信息,索要者提交的相关信息
+    # 收件人姓名
     recipient_name = Column(String(20), nullable=False)
     address = Column(String(100), nullable=False)
     message = Column(String(200))

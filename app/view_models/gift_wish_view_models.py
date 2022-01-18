@@ -11,7 +11,8 @@ class TradeInfo(object):
         self.total = len(goods)
         self.trades = [self.__map_to_trade(single) for single in goods]
 
-    def __map_to_trade(self, single):
+    @staticmethod
+    def __map_to_trade(single):
         """
 
         :param single: 单个gift或wish
