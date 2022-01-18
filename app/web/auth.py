@@ -11,6 +11,10 @@ from app.libs.email_utils import handle_send_mail
 # 根据不同的请求方法判断不同的动作,登录或注册
 @web.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+    注册,传入昵称,邮箱,密码
+    :return:
+    """
     # 实例化验证器
     register_form = RegisterForm(request.form)
     # 注册

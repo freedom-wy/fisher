@@ -3,6 +3,7 @@ from enum import Enum
 
 class PendingStatus(Enum):
     """
+    枚举
     交易的4种状态
     """
     Waiting = 1
