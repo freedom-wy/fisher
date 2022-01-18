@@ -65,7 +65,7 @@ def book_detail(isbn):
     # 判断当前访问页面的人是否登录
     if current_user.is_authenticated:
         if Gift.query.filter_by(uid=current_user.id, isbn=isbn, launched=False).first():
-            has_in_gifts= True
+            has_in_gifts = True
         if Wish.query.filter_by(uid=current_user.id, isbn=isbn, launched=False).first():
             has_in_wishes = True
 
@@ -76,4 +76,5 @@ def book_detail(isbn):
     trade_wishes_model = TradeInfo(goods=trade_wishes)
     trade_gifts_model = TradeInfo(goods=trade_gifts)
 
-    return render_template("book_detail.html", book=single_book_class, wishes=trade_wishes_model, gifts=trade_gifts_model, has_in_wishes=has_in_wishes, has_in_gifts=has_in_gifts)
+    return render_template("book_detail.html", book=single_book_class, wishes=trade_wishes_model,
+                           gifts=trade_gifts_model, has_in_wishes=has_in_wishes, has_in_gifts=has_in_gifts)

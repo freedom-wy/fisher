@@ -14,5 +14,5 @@ class DriftForm(Form):
     # 留言信息
     message = StringField()
     # 收件地址
-    address = StringField(validators=[DataRequired(), Length(min=10, max=70, message="收件人地址必须在2到80个字符之间")])
+    address = StringField(validators=[DataRequired(), Length(min=10, max=70, message="收件人地址必须在10到80个字符之间")])
 

@@ -12,6 +12,7 @@ from app.libs.email_utils import handle_send_mail
 from sqlalchemy import desc, or_
 from app.view_models.drift_view_models import DriftCollection
 from app.libs.enums import PendingStatus
+from app.models.wish import Wish
 
 
 @web.route('/drift/<int:gid>', methods=['GET', 'POST'])
@@ -71,8 +72,20 @@ def pending():
 
 
 @web.route('/drift/<int:did>/reject')
+@login_required
 def reject_drift(did):
-    pass
+    """
+    赠送者拒绝
+    :param did:
+    :return:
+    """
+    with db.auto_commit():
+        drift = Drift.query.filter_by(id=did, gifter_id=current_user.id).first_or_404()
+        drift.pending = PendingStatus.Reject
+        # 将鱼豆返还给请求者
+        requester = User.query.get_or_404(drift.requester_id)
+        requester.beans += 1
+    return redirect(url_for("web.pending"))
 
 
 @web.route('/drift/<int:did>/redraw')
@@ -94,8 +107,25 @@ def redraw_drift(did):
 
 
 @web.route('/drift/<int:did>/mailed')
+@login_required
 def mailed_drift(did):
-    pass
+    """
+    赠送者邮寄
+    :param did:
+    :return:
+    """
+    with db.auto_commit():
+        # 1、修改drift表中pending状态
+        drift = Drift.query.filter_by(id=did, gifter_id=current_user.id).first_or_404()
+        drift.pending = PendingStatus.Success
+        # 2、向赠送者发放1个鱼豆
+        current_user.beans += 1
+        # 3、修改心愿清单和赠送清单中launched状态
+        gift = Gift.query.filter_by(id=drift.gift_id).first_or_404()
+        gift.launched = True
+        wish = Wish.query.filter_by(isbn=drift.isbn, uid=drift.requester_id).first_or_404()
+        wish.launched = True
+    return redirect(url_for("web.pending"))
 
 
 def save_drift(drift_form, current_gift):

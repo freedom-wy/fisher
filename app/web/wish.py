@@ -5,6 +5,8 @@ from app.libs.db_utils import db
 from app.models.wish import Wish
 from flask import flash, redirect, url_for, render_template
 from app.view_models.trade_view_models import MyGiftWishInfo
+from ..libs.enums import PendingStatus
+from ..models.drift import Drift
 
 
 @web.route('/my/wish')
@@ -40,5 +42,14 @@ def satisfy_wish(wid):
 
 
 @web.route('/wish/book/<isbn>/redraw')
+@login_required
 def redraw_from_wish(isbn):
-    pass
+    drift = Drift.query.filter_by(pending=PendingStatus.Waiting,
+                                  isbn=isbn, requester_id=current_user.id).first()
+    if drift:
+        flash("该书籍正处于交易状态,请先前往鱼漂页面完成处理")
+    else:
+        wish = Wish.query.filter_by(isbn=isbn, launched=False, uid=current_user.id).first_or_404()
+        with db.auto_commit():
+            wish.delete()
+    return redirect(url_for("web.my_wish"))

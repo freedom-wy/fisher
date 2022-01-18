@@ -4,7 +4,9 @@ from app.models.gift import Gift
 from app.libs.db_utils import db
 from flask import current_app, flash, redirect, url_for, render_template
 from app.libs.helper import check_can_save_to_list
-from ..view_models.trade_view_models import MyGiftWishInfo
+from app.models.drift import Drift
+from app.view_models.trade_view_models import MyGiftWishInfo
+from app.libs.enums import PendingStatus
 
 
 @web.route('/my/gifts')
@@ -47,8 +49,25 @@ def save_to_gifts(isbn):
 
 
 @web.route('/gifts/<gid>/redraw')
+@login_required
 def redraw_from_gifts(gid):
-    pass
+    """
+    撤销礼物
+    :param gid:
+    :return:
+    """
+    # 1、该礼物不能存在于鱼漂中
+    # 2、扣除鱼豆,并删除该书籍
+    drift = Drift.query.filter_by(gift_id=gid, pending=PendingStatus.Waiting).first_or_404()
+    if drift:
+        flash("该书籍正处于交易状态,请先前往鱼漂页面完成处理")
+    else:
+        gift = Gift.query.filter_by(id=gid, launched=False).first_or_404()
+        with db.auto_commit():
+            current_user.beans -= current_app.config.get("BEANS_UPLOAD_ONE_BOOK")
+            gift.delete()
+    return redirect(url_for("web.my_gifts"))
+
 
 
 

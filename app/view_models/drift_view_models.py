@@ -41,7 +41,7 @@ class DriftViewModel(object):
             # 收件人姓名
             "recipient_name": drift.recipient_name,
             "mobile": drift.mobile,
-            "status": drift.status,
+            "status": drift.pending,
             "status_str": pending_status
         }
         return r
