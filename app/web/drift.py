@@ -85,7 +85,8 @@ def redraw_drift(did):
     """
     # 修改鱼漂中条目状态
     with db.auto_commit():
-        drift = Drift.query.filter_by(id=did).first_or_404()
+        # 撤销只有请求者中存在
+        drift = Drift.query.filter_by(id=did, requester_id=current_user.id).first_or_404()
         drift.pending = PendingStatus.Redraw
         # 由于撤销,归还鱼豆
         current_user.beans += 1
