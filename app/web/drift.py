@@ -9,6 +9,7 @@ from app.libs.db_utils import db
 from app.models.drift import Drift
 from app.models.book import Book
 from app.libs.email_utils import handle_send_mail
+from sqlalchemy import desc, or_
 
 
 @web.route('/drift/<int:gid>', methods=['GET', 'POST'])
@@ -45,15 +46,23 @@ def send_drift(gid):
         # 向赠送者发送消息
         handle_send_mail(to=gifter.email, subject="有人想要一本书",
                          template="email/get_gift.html", wisher=current_user, gift=current_gift)
-
+        # 跳转到鱼漂页面
+        return redirect(url_for("web.pending"))
     # 可以通过view_model也可以通过字典组装数据
     gifterinfo = DriftInfo(user=gifter)
     return render_template("drift.html", gifter=gifterinfo, user_beans=current_user.beans, form=drift_form)
 
 
 @web.route('/pending')
+@login_required
 def pending():
-    pass
+    """
+    鱼漂页面
+    :return:
+    """
+    # 查询drift表中数据并根据要求展示
+    drifts = Drift.query.filter(or_(Drift.requester_id == current_user.id, Drift.gifter_id==current_user.id)).order_by(
+        desc(Drift.create_time)).all()
 
 
 @web.route('/drift/<int:did>/reject')
