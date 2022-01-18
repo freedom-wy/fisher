@@ -1,5 +1,6 @@
 from .base import Base
 from sqlalchemy import Column, SmallInteger, Integer, String
+from app.libs.enums import PendingStatus
 
 
 class Drift(Base):
@@ -29,5 +30,15 @@ class Drift(Base):
     requester_id = Column(Integer)
     requester_nickname = Column(String(20))
     # 交易的4种状态
-    pending = Column("pending", SmallInteger, default=1)
+    _pending = Column("pending", SmallInteger, default=1)
+
+    @property
+    def pending(self):
+        # 数字类型转枚举类型
+        return PendingStatus(self._pending)
+
+    @pending.setter
+    def pending(self, status):
+        # 枚举类型转数字类型
+        self._pending = status.value
 

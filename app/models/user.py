@@ -27,6 +27,7 @@ class User(UserMixin, Base):
     wx_open_id = Column(String(50))
     wx_name = Column(String(32))
 
+    # 精妙代码
     @property
     def password(self):
         """

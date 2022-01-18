@@ -11,6 +11,7 @@ from app.models.book import Book
 from app.libs.email_utils import handle_send_mail
 from sqlalchemy import desc, or_
 from app.view_models.drift_view_models import DriftCollection
+from app.libs.enums import PendingStatus
 
 
 @web.route('/drift/<int:gid>', methods=['GET', 'POST'])
@@ -75,8 +76,18 @@ def reject_drift(did):
 
 
 @web.route('/drift/<int:did>/redraw')
+@login_required
 def redraw_drift(did):
-    pass
+    """
+    鱼漂撤销
+    :param did:
+    :return:
+    """
+    # 修改鱼漂中条目状态
+    with db.auto_commit():
+        drift = Drift.query.filter(Drift.id == did).first_or_404()
+        drift.pending = PendingStatus.Redraw
+    return redirect(url_for("web.pending"))
 
 
 @web.route('/drift/<int:did>/mailed')
