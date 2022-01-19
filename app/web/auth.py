@@ -15,6 +15,8 @@ def register():
     注册,传入昵称,邮箱,密码
     :return:
     """
+    if current_user.is_authenticated:
+        return redirect(url_for("web.index"))
     # 实例化验证器
     register_form = RegisterForm(request.form)
     # 注册
@@ -62,14 +64,13 @@ def forget_password_request():
     if request.method == "POST" and forget_password_form.validate():
         # 通过邮箱查用户,返回用户数据或404
         user = User.query.filter_by(email=forget_password_form.email.data).first_or_404()
-        # 解决循环引用
         handle_send_mail(to=user.email, subject="重置你的密码", template="email/reset_password.html", user=user,
                          token=user.generate_token())
         flash("密码重置邮件已发送至{},该邮件5分钟过期".format(user.email))
     return render_template("auth/forget_password_request.html", form=forget_password_form)
 
 
-# 该视图可以随便进入,即为路径后token数据随便写
+# 该视图可以随便进入,即为路径后token数据随便写,会验证
 @web.route('/reset/password/<token>', methods=['GET', 'POST'])
 def forget_password(token):
     password_form = ResetPasswordForm(request.form)
@@ -92,6 +93,7 @@ def change_password():
 
 
 @web.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for("web.index"))
