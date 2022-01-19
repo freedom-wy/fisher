@@ -6,7 +6,12 @@ from flask import Blueprint, render_template
 web = Blueprint("web", __name__)
 
 
-# # 用于规范输出404页面,AOP编程思想
-# @web.app_errorhandler(404)
-# def not_found(e):
-#     return render_template("404.html"), 404
+# 用于规范输出404页面,AOP编程思想
+@web.app_errorhandler(404)
+def not_found(e):
+    return render_template("404.html"), 404
+
+
+@web.app_errorhandler(500)
+def not_found(e):
+    return render_template("500.html"), 500

@@ -1,9 +1,9 @@
 from .blueprint import web
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, abort
 from app.forms.register_login_auth import RegisterForm, LoginForm
 from app.models.user import User
 from app.libs.db_utils import db
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 from app.forms.forget_password_auth import ForgetPasswordAuthEmail, ResetPasswordForm
 from app.libs.email_utils import handle_send_mail
 
@@ -86,8 +86,9 @@ def forget_password(token):
 
 
 @web.route('/change/password', methods=['GET', 'POST'])
+@login_required
 def change_password():
-    pass
+    abort(500)
 
 
 @web.route('/logout')

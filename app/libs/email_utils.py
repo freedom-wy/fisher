@@ -3,7 +3,6 @@
 """
 from flask_mail import Message
 from flask import current_app, render_template
-# from app import mail
 from threading import Thread
 from flask_mail import Mail
 
@@ -19,6 +18,7 @@ def async_send_email(app, msg):
 def handle_send_mail(to, subject, template, **kwargs):
     msg = Message(subject="[鱼书]{}".format(subject), sender=current_app.config.get("MAIL_USERNAME"), recipients=[to])
     msg.html = render_template(template, **kwargs)
+    # 在多线程中使用flask的核心对象
     app = current_app._get_current_object()
     t = Thread(target=async_send_email, args=(app, msg))
     t.start()

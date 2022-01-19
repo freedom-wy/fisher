@@ -1,7 +1,8 @@
-from flask import render_template
+from flask import render_template, abort
 from .blueprint import web
 from app.models.gift import Gift
 from app.view_models.book_view_models import SingleBookViewModel
+from flask_login import login_required
 
 
 @web.route('/')
@@ -17,5 +18,6 @@ def index():
 
 
 @web.route('/personal')
+@login_required
 def personal_center():
-    return 'personal'
+    abort(500)

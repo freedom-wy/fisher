@@ -19,7 +19,7 @@ from app.models.wish import Wish
 @login_required
 def send_drift(gid):
     """
-    向他人索要图书
+    向他人索要图书,会创建鱼漂
     1、自己不能向自己请求书籍
     2、索要者的鱼豆必须大于或等于1
     3、每索取两本书，自己必须送出一本书
@@ -44,7 +44,7 @@ def send_drift(gid):
 
     # 邮寄信息
     if request.method == "POST" and drift_form.validate():
-        # 将页面数据保存到drift表中
+        # 将页面数据保存到drift表中,就是创建鱼漂清单数据
         save_drift(drift_form, current_gift)
         # 向赠送者发送消息
         handle_send_mail(to=gifter.email, subject="有人想要一本书",

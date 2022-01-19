@@ -10,7 +10,7 @@ from app.libs.db_utils import db
 # from .gift import Gift
 # from .wish import Wish
 from .drift import Drift
-from ..libs.enums import PendingStatus
+from app.libs.enums import PendingStatus
 
 
 class User(UserMixin, Base):
