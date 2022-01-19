@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.idea/
+secure_config.py
+
+.venv/
+
+sample/demo/
+sample/bgsd/
