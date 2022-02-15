@@ -30,4 +30,12 @@ class CollectionBookViewModel(object):
     def fill(self, yushu_book, keyword):
         self.total = yushu_book.total
         self.keyword = keyword
-        self.books = [SingleBookViewModel(book) for book in yushu_book.books]
+        self.books = self.__check_isbn(yushu_book)
+
+    @staticmethod
+    def __check_isbn(yushu_book):
+        temp = []
+        for book in yushu_book.books:
+            if book.get("isbn"):
+                temp.append(SingleBookViewModel(book))
+        return temp

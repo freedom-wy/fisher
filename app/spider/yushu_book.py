@@ -38,7 +38,8 @@ class YuShuBook(object):
         else:
             self.__fill_single(data=one_book.to_dict())
 
-    def __save_book_data_from_search_keyword(self, books):
+    @staticmethod
+    def __save_book_data_from_search_keyword(books):
         """
         存储通过关键字查询的数据,存储前先通过isbn查询
         :param books:
@@ -46,6 +47,8 @@ class YuShuBook(object):
         """
         with db.auto_commit():
             for i in books:
+                if not i.get("isbn"):
+                    continue
                 save_book = Book()
                 book = db.session.query(Book).filter(Book.isbn == i.get("isbn")).first()
                 if not book:
@@ -78,4 +81,3 @@ if __name__ == '__main__':
         test_yushu = YuShuBook()
         test_yushu.search_by_keyword(keyword="三国演义")
         # test_yushu.search_by_isbn(isbn="9787805200552")
-        print(test_yushu.books)
