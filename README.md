@@ -1,5 +1,6 @@
 # fisher
-鱼书项目
+鱼书项目  
+示例站点: https://fisher.yase.me
 
 请支持正版: https://coding.imooc.com/class/194.html
 ***
