@@ -4,7 +4,9 @@ from sqlalchemy import Column, Integer, String, Boolean, Float
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from .base import Base
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+# 解决ImportError: cannot import name 'TimedJSONWebSignatureSerializer' from 'itsdangerous'问题
+from authlib.jose import jwt, JoseError
 from flask import current_app
 from app.libs.db_utils import db
 # from .gift import Gift
@@ -57,9 +59,13 @@ class User(UserMixin, Base):
         生成重置密码中的token
         :return:
         """
-        s = Serializer(current_app.config.get("SECRET_KEY"), current_app.config.get("TOKEN_EXPIRATION"))
-        # 序列化
-        return s.dumps({"id": self.id}).decode("utf-8")
+        # s = Serializer(current_app.config.get("SECRET_KEY"), current_app.config.get("TOKEN_EXPIRATION"))
+        # # 序列化
+        # return s.dumps({"id": self.id}).decode("utf-8")
+        header = {'alg': 'HS256'}
+        key = current_app.config.get("SECRET_KEY")
+        data = {"id": self.id}
+        return jwt.encode(header=header, payload=data, key=key)
 
     @staticmethod
     def reset_password(token, newpassword):
@@ -68,12 +74,17 @@ class User(UserMixin, Base):
         :param newpassword:
         :return:
         """
-        s = Serializer(current_app.config.get("SECRET_KEY"))
-        # 反序列化
+        # s = Serializer(current_app.config.get("SECRET_KEY"))
+        # # 反序列化
+        # try:
+        #     data = s.loads(token.encode("utf-8"))
+        # except:
+        #     # 解密token失败
+        #     return False
+        key = current_app.config.get("SECRET_KEY")
         try:
-            data = s.loads(token.encode("utf-8"))
-        except:
-            # 解密token失败
+            data = jwt.decode(token, key)
+        except JoseError:
             return False
         uid = data.get("id")
         # 设置新密码

@@ -1,9 +1,9 @@
 from flask import Flask
-from .web.blueprint import web
-from .libs.db_utils import db
-from .libs.login_utils import login_manager
+from app.web.blueprint import web
+from app.libs.db_utils import db
+from app.libs.login_utils import login_manager
 from flask_migrate import Migrate
-from .libs.email_utils import mail
+from app.libs.email_utils import mail
 
 
 def create_app():

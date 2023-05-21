@@ -30,4 +30,13 @@ nginx: configuration file /etc/nginx/nginx.conf test failed
 注释默认配置
 /etc/nginx/sites-enabled/*;
 ```
+#### 2 20230520问题
+(1)、 由于flask等包版本升级造成的一些方法无法使用
+(2)、 orm的使用
+```shell
+export FLASK_APP=fisher.py
+flask db init
+flask db migrate
+flask db upgrade
+```
 
